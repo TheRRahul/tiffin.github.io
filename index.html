@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiffin services</title>
+    <link rel="stylesheet" type="text/css" href="home.css">
+</head>
+<body>
+    <div class="banner">
+        <img src="images/logo.png" alt="Logo" class="logo">
+        <h1 class="main-h1">Welcome to Our Tiffin's </h1>
+        <p class="main-p">Choose your language, select your station, and pick your tiffin menu.<br>
+        We’ll deliver your tiffin to your chosen location. 🚀</p>
+        <div class="buttons">
+             <button class="btn btn-marathi" onclick="window.location.href='selection.html'">मराठी</button>
+            <button class="btn btn-english" onclick="window.location.href='selection.html'">English</button>
+        </div>
+    </div>
+
+    
+    <script>
+  function navigateToPage(language) {
+    const url = language === 'marathi' ? 'selection.html?lang=marathi' : 'selection.html?lang=english';
+    window.location.href = url;
+  }
+</script>
+</body>
+</html>

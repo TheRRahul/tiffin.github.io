@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Tiffin Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-size: cover;
+            background-color: #009688;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #000;
+        }
+
+        .service-selection {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .service-box {
+            width: 200px;
+            height: 200px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .service-box:hover {
+            transform: scale(1.05);
+        }
+
+        .service-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+
+        .service-box span {
+            position: absolute;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .selected-service {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .service-details {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .subscription-duration {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .next-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .next-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Select Your Tiffin Service</h1>
+    </div>
+
+    <!-- Service selection boxes -->
+    <div class="service-selection">
+        <div class="service-box" onclick="selectService('Lunch', 'images/lunch.jpg', '2 Roti, Rice, Dal, Veg Curry')">
+            <img src="images/tiffin-img1.jpg" alt="Lunch">
+            <span>Lunch</span>
+        </div>
+        <div class="service-box" onclick="selectService('Dinner', 'images/dinner.jpg', '2 Roti, Rice, Paneer, Salad')">
+            <img src="images/tiffin-img2.jpg" alt="Dinner">
+            <span>Dinner</span>
+        </div>
+        <div class="service-box" onclick="selectService('Tiffin', 'images/tiffin.jpg', '1 Roti, Sabzi, Salad')">
+            <img src="images/tiffin-img3.jpg" alt="Tiffin">
+            <span>Tiffin</span>
+        </div>
+        <div class="service-box" onclick="selectService('Indian', 'images/indian.jpg', '2 Roti, Rice, Chicken Curry')">
+            <img src="images/tiffin-img4.jpg" alt="Indian">
+            <span>Chicken</span>
+        </div>
+        <div class="service-box" onclick="selectService('Other', 'images/others.jpg', '1 Roti, Rice, Special Curry')">
+            <img src="images/tiffin-img5.jpg" alt="Other">
+            <span>Other</span>
+        </div>
+        <div class="service-box" onclick="selectService('Special', 'images/special.jpg', '3 Roti, Rice, Special Veg Curry, Salad')">
+            <img src="images/tiffin-img6.jpg" alt="Special">
+            <span>Special</span>
+        </div>
+    </div>
+
+    <!-- Selected service display -->
+    <div id="selectedService" class="selected-service">
+        Please select a service.
+    </div>
+
+    <!-- Service details -->
+    <div id="serviceDetails" class="service-details">
+        No service selected.
+    </div>
+
+    <!-- Subscription duration selection -->
+    <div class="subscription-duration">
+        <label for="duration">Select Subscription Duration:</label>
+        <select id="duration" name="duration" onchange="saveDuration()">
+            <option value="1">1 Month</option>
+            <option value="2">2 Months</option>
+            <option value="3">3 Months</option>
+        </select>
+    </div>
+
+    <!-- Next Page button -->
+    <button id="nextPageButton" class="next-button" onclick="goToInvoicePage()">Next Page</button>
+
+    <script>
+        function selectService(name, imageSrc, details) {
+            // Update selected service text
+            document.getElementById('selectedService').innerHTML = `You have selected: <br><strong>${name}</strong>`;
+
+            // Update service details
+            document.getElementById('serviceDetails').innerHTML = `Service Includes: <br><strong>${details}</strong>`;
+
+            // Store selected service in sessionStorage
+            sessionStorage.setItem('selectedService', name);
+            sessionStorage.setItem('serviceDetails', details);
+
+            // Show the Next Page button
+            document.getElementById('nextPageButton').style.display = 'inline-block';
+        }
+
+        function saveDuration() {
+            const selectedDuration = document.getElementById('duration').value;
+            sessionStorage.setItem('subscriptionDuration', selectedDuration);
+        }
+
+        function goToInvoicePage() {
+            // Redirect to the invoice page (you can replace the URL with the actual invoice page URL)
+            window.location.href = 'invoice.html'; // Change 'invoice.html' to your invoice page URL
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #95bdff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .invoice-details, .station-details {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .invoice-details p, .station-details p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .invoice-details p strong, .station-details p strong {
+            color: #333;
+        }
+
+        .invoice-details span, .station-details span {
+            font-weight: bold;
+            color: #2d2d2d;
+        }
+
+        #qrcode {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Invoice Details</h1>
+
+        <!-- Display selected service and subscription duration -->
+        <div class="invoice-details">
+            <p><strong>Selected Tiffin Service:</strong> <span id="invoiceService"></span></p>
+            <p><strong>Service Includes:</strong> <span id="invoiceServiceDetails"></span></p>
+            <p><strong>Subscription Duration:</strong> <span id="invoiceDuration"></span></p>
+        </div>
+
+        <!-- Display selected pickup and drop stations -->
+        <div class="station-details">
+            <p><strong>Pickup Station:</strong> <span id="pickupStation"></span></p>
+            <p><strong>Drop Station:</strong> <span id="dropStation"></span></p>
+        </div>
+
+        <!-- QR Code Section -->
+        <div id="qrcode">
+            <canvas id="qrCanvas"></canvas>
+        </div>
+
+        <div class="footer">
+            <p>For any queries, please <a href="mailto:support@example.com">contact us</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // Retrieve data from sessionStorage for tiffin selection
+            const selectedService = sessionStorage.getItem('selectedService');
+            const serviceDetails = sessionStorage.getItem('serviceDetails');
+            const subscriptionDuration = sessionStorage.getItem('subscriptionDuration');
+
+            // Retrieve data from localStorage for station selection
+            const pickupStation = localStorage.getItem('selectedPickupStation');
+            const dropStation = localStorage.getItem('selectedDropStation');
+
+            // Display tiffin details on the invoice page
+            document.getElementById('invoiceService').innerText = selectedService;
+            document.getElementById('invoiceServiceDetails').innerText = serviceDetails;
+            document.getElementById('invoiceDuration').innerText = subscriptionDuration + ' Month(s)';
+
+            // Display station details on the invoice page
+            document.getElementById('pickupStation').innerText = pickupStation ? pickupStation : "Not selected";
+            document.getElementById('dropStation').innerText = dropStation ? dropStation : "Not selected";
+
+            // Construct the WhatsApp message with the data
+            const message = `Hello%20I%20have%20selected%20Tiffin%20Service%20(${selectedService})%20with%20details%20(${serviceDetails}).%0A` +
+                            `Pickup%20Station%20:%20${pickupStation || "Not%20selected"}%0A` +
+                            `Drop%20Station%20:%20${dropStation || "Not%20selected"}%0A` +
+                            `Subscription%20Duration%20:%20${subscriptionDuration || "Not%20selected"}`;
+
+            // Create the WhatsApp URL
+            const whatsappLink = `https://wa.me/919892554364?text=${message}`;
+
+            // Generate the QR Code with the WhatsApp link
+            QRCode.toCanvas(document.getElementById('qrCanvas'), whatsappLink, function(error) {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log("QR Code generated successfully!");
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

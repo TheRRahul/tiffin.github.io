@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Stations</title>
+    <link rel="stylesheet" type="text/css" href="selection.css">
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <img src="images/station-bg.png" alt="Station Image">
+            <button id="pickupButton" onclick="openModal('pickup')">Select Pickup Station</button>
+        </div>
+        <div class="content">
+            <p>Please select a station for pickup or drop.<br>
+            Choose your desired location and proceed with your journey.</p>
+
+            <button id="nextButton" class="next-button" onclick="goToNextPage()" style="display: none;">Next</button>
+        </div>
+        <div class="box">
+            <img src="images/station-bg.png" alt="Station Image">
+            <button id="dropButton" onclick="openModal('drop')">Select Drop Station</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="stationModal" class="modal">
+        <div class="modal-content">
+            <h3>Select a Station</h3>
+            <ul id="stationList">
+                <!-- Stations will be listed here -->
+            </ul>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const stations = [
+            "Mumbai CST", "Andheri", "Borivali", "Dadar", "Bandra",
+            "Kurla", "Thane", "Goregaon", "Malad", "Vashi"
+        ];
+
+        let selectedButton = null;
+        let selectedStation = {
+            pickup: null,
+            drop: null
+        };
+
+        function openModal(type) {
+            const modal = document.getElementById("stationModal");
+            const stationList = document.getElementById("stationList");
+
+            // Store the selected button (pickup or drop)
+            selectedButton = type === 'pickup' ? document.getElementById('pickupButton') : document.getElementById('dropButton');
+
+            // Clear the previous list
+            stationList.innerHTML = '';
+
+            // Populate the modal with station names
+            stations.forEach(station => {
+                const listItem = document.createElement('li');
+                listItem.textContent = station;
+                listItem.classList.add('station-item');
+                listItem.onclick = () => selectStation(station, listItem);
+                if (station === selectedStation.pickup || station === selectedStation.drop) {
+                    listItem.classList.add('selected'); 
+                }
+                stationList.appendChild(listItem);
+            });
+
+            // Show the modal
+            modal.style.display = "flex";
+        }
+
+        function selectStation(station, listItem) {
+            // Don't select the same station for both pickup and drop
+            if ((selectedStation.pickup === station && selectedButton !== document.getElementById('pickupButton')) ||
+                (selectedStation.drop === station && selectedButton !== document.getElementById('dropButton'))) {
+                return;
+            }
+
+            // Update the selected station based on the button clicked (pickup or drop)
+            if (selectedButton === document.getElementById('pickupButton')) {
+                selectedStation.pickup = station;
+                selectedButton.textContent = `Pickup: ${station}`;
+            } else if (selectedButton === document.getElementById('dropButton')) {
+                selectedStation.drop = station;
+                selectedButton.textContent = `Drop: ${station}`;
+            }
+
+            // Save the selected stations to localStorage
+            localStorage.setItem('selectedPickupStation', selectedStation.pickup);
+            localStorage.setItem('selectedDropStation', selectedStation.drop);
+
+            // Mark the station as selected
+            const allItems = document.querySelectorAll('.station-item');
+            allItems.forEach(item => item.classList.remove('selected'));
+            listItem.classList.add('selected');
+
+            // Enable the Next button if both stations are selected
+            if (selectedStation.pickup && selectedStation.drop) {
+                document.getElementById('nextButton').style.display = 'inline-block';
+            }
+
+            // Close the modal
+            closeModal();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("stationModal");
+            modal.style.display = "none";
+        }
+
+        function goToNextPage() {
+            // Redirect to the next page (update the URL as needed)
+            window.location.href = "select-tiffin.html"; 
+        }
+    </script>
+</body>
+</html>
